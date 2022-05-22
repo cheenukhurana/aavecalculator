@@ -10,7 +10,8 @@ export default function Layout({ children }) {
                     <meta name="viewport" content="initial-scale=1, width=device-width" />
                 </Head>
                 <header className="text-center">
-                    <h1>Aave Calculator</h1>
+                    <h1 className="text-white text-3xl">Aave Calculator</h1>
+                    <h6 className="text-[#dbe1e8]">Calculate liquidation price, loan amount or collateral required</h6>
                 </header>
                 <main>
                     {children}

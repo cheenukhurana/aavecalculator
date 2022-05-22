@@ -2,7 +2,7 @@ import Head from 'next/head'
 
 export default function Layout({ children }) {
     return (
-        <div className='bg-[#5f3473] h-screen'>
+        <div className='bg-gradient-to-br from-[#5f3473] to-[#71c1d6] h-screen'>
             <div className='max-w-2xl mx-auto py-4'>
                 <Head>
                     <title>Aave Calculator</title>

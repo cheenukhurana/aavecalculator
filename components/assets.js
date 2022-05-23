@@ -2,12 +2,32 @@
 import { useEffect } from "react"
 import { markets } from "../markets"
 
-export default function Assets({ networkType, setCollateralType, setLoanType, calculatorType, setCalculatorType }) {
+export default function Assets({ networkType, collateralType, loanType, setCollateralType, setLoanType, calculatorType, setCalculatorType }) {
 
     useEffect(() => {
-        setCollateralType(Object.keys(markets[networkType])[0])
-        setLoanType(Object.keys(markets[networkType])[0])
-    }, [networkType])
+        if (!collateralType || !markets[networkType][collateralType]) {
+            for (let i = 0; i < Object.keys(markets[networkType]).length; i++) {
+                const asset = Object.keys(markets[networkType])[i]
+                if(markets[networkType][asset]["collateral"] === "YES")
+                {
+                    setCollateralType(asset)
+                    return
+                }
+            }
+        }
+
+        if (!loanType || !markets[networkType][loanType]) {
+            for (let i = 0; i < Object.keys(markets[networkType]).length; i++) {
+                const asset = Object.keys(markets[networkType])[i]
+                if(markets[networkType][asset]["borrowing"] === "YES")
+                {
+                    setLoanType(asset)
+                    return
+                }
+            }
+        }
+        
+    }, [loanType, collateralType, networkType])
 
     return (
         <div>
@@ -20,7 +40,21 @@ export default function Assets({ networkType, setCollateralType, setLoanType, ca
                         {
                             Object.keys(markets[networkType]).map((asset) => (
                                 <>
-                                    {markets[networkType][asset]["collateral"] === "YES" && <option value={asset} key={asset}>{asset}</option>}
+                                    {
+                                        markets[networkType][asset]["collateral"] === "YES" && (
+                                            <>
+                                                {
+
+                                                    collateralType == asset ? (
+                                                        <option value={asset} key={asset} selected>{asset}</option>
+
+                                                    ) : (
+                                                        <option value={asset} key={asset}>{asset}</option>
+                                                    )
+                                                }
+                                            </>
+                                        )
+                                    }
                                 </>
                             ))
                         }
@@ -33,7 +67,19 @@ export default function Assets({ networkType, setCollateralType, setLoanType, ca
                         {
                             Object.keys(markets[networkType]).map((asset) => (
                                 <>
-                                    {markets[networkType][asset]["borrowing"] === "YES" && <option value={asset} key={asset}>{asset}</option>}
+                                    {markets[networkType][asset]["borrowing"] === "YES" && (
+                                            <>
+                                                {
+
+                                                    loanType == asset ? (
+                                                        <option value={asset} key={asset} selected>{asset}</option>
+
+                                                    ) : (
+                                                        <option value={asset} key={asset}>{asset}</option>
+                                                    )
+                                                }
+                                            </>
+                                        )}
                                 </>
                             ))
                         }

@@ -16,6 +16,9 @@ export const markets = {
         "BAL": {"borrowing": "YES", "collateral": "YES", "loanToValue": 0.2, "liquidationThreshold": 0.45},
         "WBTC": {"borrowing": "YES", "collateral": "YES", "loanToValue": 0.7, "liquidationThreshold": 0.75},
         "WETH": {"borrowing": "YES", "collateral": "YES", "loanToValue": 0.8, "liquidationThreshold": 0.825}
+    },
+    "ARBITRUM": {
+        
     }
 }
 

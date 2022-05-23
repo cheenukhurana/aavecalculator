@@ -27,7 +27,7 @@ function Calculator(props) {
   }
 }
 
-function NetworkTypes({ networkType,setNetworkType }) {
+function NetworkTypes({ networkType, setNetworkType }) {
   return (
     <div className="flex justify-around mt-6 text-[#dbe1e8] text-sm mt-10">
       {networkType === 'ETHEREUM' ? (
@@ -73,11 +73,9 @@ export default function Home() {
   const [loanItemPrice, setLoanItemPrice] = useState(0)
   const [loanToValue, setLoanToValue] = useState(0)
   const [liquidationThreshold, setLiquidationThreshold] = useState(0)
-  console.log(collateralPrice)
-  console.log(loanItemPrice)
 
   useEffect(() => {
-    if (collateralType) {
+    if (collateralType && markets[networkType][collateralType]) {
       setLoanToValue(markets[networkType][collateralType]["loanToValue"])
       setLiquidationThreshold(markets[networkType][collateralType]["liquidationThreshold"])
     }
@@ -120,8 +118,7 @@ export default function Home() {
     <Layout>
     <NetworkTypes networkType={networkType} setNetworkType={setNetworkType} />
       <section className='mt-10'>
-        
-        <Assets networkType={networkType} setCollateralType={setCollateralType} setLoanType={setLoanType} calculatorType={calculatorType} setCalculatorType={setCalculatorType} />
+        <Assets networkType={networkType} collateralType={collateralType} loanType={loanType} setCollateralType={setCollateralType} setLoanType={setLoanType} calculatorType={calculatorType} setCalculatorType={setCalculatorType} />
         <Calculator collateralType={collateralType} loanType={loanType} calculatorType={calculatorType} collateralPrice={collateralPrice} loanItemPrice={loanItemPrice} loanToValue={loanToValue} liquidationThreshold={liquidationThreshold} />
       </section>
     </Layout>

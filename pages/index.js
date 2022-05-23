@@ -41,25 +41,36 @@ function NetworkTypes({ networkType, setNetworkType }) {
         <button className="border border-white border-b-2 min-w-[25%] hover:bg-black" onClick={() => { setNetworkType('POLYGON') }}>Polygon V3</button>
       )}
       {networkType === 'ARBITRUM' ? (
-        <button className="border border-white border-b-2 min-w-[25%] bg-black hover:bg-black" onClick={() => { setNetworkType('ARBITRUM') }}>Arbitrum</button>
+        <button className="border border-white border-b-2 min-w-[25%] bg-black hover:bg-black" onClick={() => { setNetworkType('ARBITRUM') }}>Arbitrum V3</button>
       ) : (
-        <button className="border border-white border-b-2 min-w-[25%] hover:bg-black" onClick={() => { setNetworkType('ARBITRUM') }}>Arbitrum</button>
+        <button className="border border-white border-b-2 min-w-[25%] hover:bg-black" onClick={() => { setNetworkType('ARBITRUM') }}>Arbitrum V3</button>
       )}
     </div>
   )
 }
 
-function getChainLinkPrice(address, { setPrice }) {
-  // const { ethers } = require("ethers") // for nodejs only
-  const provider = new ethers.providers.JsonRpcProvider("https://mainnet.infura.io/v3/646811ce6d7641bc893009e2b67b27f0")
+function getChainLinkPrice(networkType, address,  setPrice ) {
+  let provider;
+  if (networkType === "POLYGON") {
+    provider = new ethers.providers.JsonRpcProvider("https://polygon-mainnet.infura.io/v3/646811ce6d7641bc893009e2b67b27f0")
+  }
+  else if (networkType === "ARBITRUM") {
+    provider = new ethers.providers.JsonRpcProvider("https://arbitrum-mainnet.infura.io/v3/646811ce6d7641bc893009e2b67b27f0")
+  }
+  else {
+    provider = new ethers.providers.JsonRpcProvider("https://mainnet.infura.io/v3/646811ce6d7641bc893009e2b67b27f0")
+  }
+
   const aggregatorV3InterfaceABI = [{ "inputs": [], "name": "decimals", "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "description", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint80", "name": "_roundId", "type": "uint80" }], "name": "getRoundData", "outputs": [{ "internalType": "uint80", "name": "roundId", "type": "uint80" }, { "internalType": "int256", "name": "answer", "type": "int256" }, { "internalType": "uint256", "name": "startedAt", "type": "uint256" }, { "internalType": "uint256", "name": "updatedAt", "type": "uint256" }, { "internalType": "uint80", "name": "answeredInRound", "type": "uint80" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "latestRoundData", "outputs": [{ "internalType": "uint80", "name": "roundId", "type": "uint80" }, { "internalType": "int256", "name": "answer", "type": "int256" }, { "internalType": "uint256", "name": "startedAt", "type": "uint256" }, { "internalType": "uint256", "name": "updatedAt", "type": "uint256" }, { "internalType": "uint80", "name": "answeredInRound", "type": "uint80" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "version", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }]
   const addr = address
   const priceFeed = new ethers.Contract(addr, aggregatorV3InterfaceABI, provider)
-  priceFeed.latestRoundData()
-    .then((roundData) => {
-      const res = Number((roundData.answer.toString() / Math.pow(10, 8)).toFixed(4))
-      console.log("Latest Round Data", res)
-      setPrice(res)
+  priceFeed.decimals()
+    .then(decimals => {
+      priceFeed.latestRoundData()
+        .then((roundData) => {
+          const res = Number((roundData.answer.toString() / Math.pow(10, decimals)).toFixed(4))
+          setPrice(res)
+        })
     })
 }
 
@@ -81,42 +92,21 @@ export default function Home() {
     }
   }, [networkType, collateralType])
 
-  // useEffect(() => {
-  //   if(collateralType)
-  //   {
-  //     getChainLinkPrice(markets[networkType][collateralType]["chainlinkAddress"],setCollateralPrice)
-  //   }
-
-  // },[networkType, collateralType])
-
-
-  // useEffect(() => {
-  //   if(loanType)
-  //   {
-  //     getChainLinkPrice(markets[networkType][loanType]["chainlinkAddress"],setLoanItemPrice)
-  //   }
-
-  // },[networkType, loanType])
+  useEffect(() => {
+    if (collateralType && markets[networkType][collateralType]) {
+      getChainLinkPrice(networkType, markets[networkType][collateralType]["chainlinkAddress"], setCollateralPrice)
+    }
+  }, [networkType, collateralType])
 
   useEffect(() => {
-    if (networkType === "ETHEREUM") {
-      setCollateralPrice(29925.22)
-      setLoanItemPrice(1.0004)
+    if (loanType && markets[networkType][loanType]) {
+      getChainLinkPrice(networkType, markets[networkType][loanType]["chainlinkAddress"], setLoanItemPrice)
     }
-    else if (networkType === "POLYGON") {
-      setCollateralPrice(29981.36)
-      setLoanItemPrice(1.0002)
-    }
-    else {
-      setCollateralPrice((29975))
-      setLoanItemPrice(1.0005)
-    }
-
-  }, [networkType, collateralType, loanType])
+  }, [networkType, loanType])
 
   return (
     <Layout>
-    <NetworkTypes networkType={networkType} setNetworkType={setNetworkType} />
+      <NetworkTypes networkType={networkType} setNetworkType={setNetworkType} />
       <section className='mt-10'>
         <Assets networkType={networkType} collateralType={collateralType} loanType={loanType} setCollateralType={setCollateralType} setLoanType={setLoanType} calculatorType={calculatorType} setCalculatorType={setCalculatorType} />
         <Calculator collateralType={collateralType} loanType={loanType} calculatorType={calculatorType} collateralPrice={collateralPrice} loanItemPrice={loanItemPrice} loanToValue={loanToValue} liquidationThreshold={liquidationThreshold} />

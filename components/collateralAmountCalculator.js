@@ -15,14 +15,12 @@ export default function CollateralAmountCalculator(props) {
     useEffect(() => {
 
         const calculateCollateralAmount = () => {
-            if(loanAmount && liquidationPrice)
-            {
-                let colAmount = loanAmount*loanItemPrice/(liquidationThreshold*liquidationPrice)
-                colAmount = (colAmount*collateralPrice < (loanAmount*loanItemPrice/loanToValue)) ? loanAmount*loanItemPrice/(loanToValue*collateralPrice) : colAmount
+            if (loanAmount && liquidationPrice) {
+                let colAmount = loanAmount * loanItemPrice / (liquidationThreshold * liquidationPrice)
+                colAmount = (colAmount * collateralPrice < (loanAmount * loanItemPrice / loanToValue)) ? loanAmount * loanItemPrice / (loanToValue * collateralPrice) : colAmount
                 setCollateralAmount(colAmount)
             }
-            else
-            {
+            else {
                 setCollateralAmount(0)
             }
         }
@@ -40,11 +38,17 @@ export default function CollateralAmountCalculator(props) {
 
             <div className="w-[46%]">
                 <div className="text-[#dbe1e8] text-center">Enter Loan Amount</div>
-                <input className="mt-2 w-[100%] px-4 py-1.5 text-sm rounded-md" type="number" name="Loan Amount" placeholder="Loan Amount" value={loanAmount} onChange={e => setLoanAmount(e.target.value)} />
+                <div className="mt-2 w-[100%]">
+                    <input className="pl-4 py-1.5 text-sm rounded-tl-md rounded-bl-md w-[75%]" type="number" name="Loan Amount" placeholder="Loan Amount" value={loanAmount} onChange={e => setLoanAmount(e.target.value)} />
+                    <input className="py-1.5 text-sm rounded-tr-md rounded-br-md w-[25%] bg-white text-center" type="text" value={props.loanType} disabled />
+                </div>
+
 
                 <p className="text-[#dbe1e8] text-center mt-8">Enter Liquidation Price</p>
-                <input className="mt-2 w-[100%] px-4 py-1.5 text-sm rounded-md" type="number" name="Liquidation Price" placeholder="Liquidation Price" value={liquidationPrice} onChange={e => setLiquidationPrice(e.target.value)}></input>
-                
+                <div className="mt-2 w-[100%">
+                    <input className="pl-4 py-1.5 text-sm rounded-tl-md rounded-bl-md w-[75%]" type="number" name="Liquidation Price" placeholder="Liquidation Price" value={liquidationPrice} onChange={e => setLiquidationPrice(e.target.value)} />
+                    <input className="py-1.5 text-sm rounded-tr-md rounded-br-md w-[25%] bg-white text-center" type="text" value="USD" disabled />
+                </div>
             </div>
 
             <div className="w-[46%] text-center">

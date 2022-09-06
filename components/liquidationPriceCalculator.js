@@ -35,11 +35,17 @@ export default function LiquidationPriceCalculator(props) {
 
             <div className="w-[46%]">
                 <div className="text-[#dbe1e8] text-center">Enter Collateral Amount</div>
-                <input className="mt-2 w-[100%] px-4 py-1.5 text-sm rounded-md" type="number" name="Collateral Amount" placeholder="Collateral Amount" value={collateralAmount} onChange={e => setCollateralAmount(e.target.value)} />
+                <div className="mt-2 w-100%">
+                    <input className="pl-4 py-1.5 text-sm rounded-tl-md rounded-bl-md w-[75%]" type="number" name="Collateral Amount" placeholder="Collateral Amount" value={collateralAmount} onChange={e => setCollateralAmount(e.target.value)} />
+                    <input className="py-1.5 text-sm rounded-tr-md rounded-br-md w-[25%] bg-white text-center" type="text" value={props.collateralType} disabled />
+                </div>
+
 
                 <p className="text-[#dbe1e8] text-center mt-8">Enter Loan Amount</p>
-                <input className="mt-2 w-[100%] px-4 py-1.5 text-sm rounded-md" type="number" name="Loan Amount" placeholder="Loan Amount" value={loanAmount} onChange={e => setLoanAmount(e.target.value)}></input>
-                
+                <div className="mt-2 w-[100%]">
+                    <input className="pl-4 py-1.5 text-sm rounded-tl-md rounded-bl-md w-[75%]" type="number" name="Loan Amount" placeholder="Loan Amount" value={loanAmount} onChange={e => setLoanAmount(e.target.value)} />
+                    <input className="py-1.5 text-sm rounded-tr-md rounded-br-md w-[25%] bg-white text-center" type="text" value={props.loanType} disabled />
+                </div>
             </div>
 
             {/* <div className="w-[46%] text-[#dbe1e8] text-center">

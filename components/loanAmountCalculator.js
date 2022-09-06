@@ -14,14 +14,12 @@ export default function LoanAmountCalculator(props) {
 
     useEffect(() => {
         const calculateLoanAmount = () => {
-            if(collateralAmount && liquidationPrice)
-            {
-                let lAmount = (liquidationThreshold*collateralAmount*liquidationPrice)/loanItemPrice
-                lAmount = (lAmount > loanToValue*collateralAmount*collateralPrice) ? loanToValue*collateralAmount*collateralPrice : lAmount
+            if (collateralAmount && liquidationPrice) {
+                let lAmount = (liquidationThreshold * collateralAmount * liquidationPrice) / loanItemPrice
+                lAmount = (lAmount > loanToValue * collateralAmount * collateralPrice) ? loanToValue * collateralAmount * collateralPrice : lAmount
                 setLoanAmount(lAmount)
             }
-            else
-            {
+            else {
                 setLoanAmount(0)
             }
         }
@@ -36,14 +34,20 @@ export default function LoanAmountCalculator(props) {
             <input type="number" name="Collateral Amount" placeholder="Collateral Amount" value={collateralAmount} onChange={e => setCollateralAmount(e.target.value)} />
             <p>Enter Liquidation Price</p>
             <input type="number" name="Liquidation Price" placeholder="Liquidation Price" value={liquidationPrice} onChange={e => setLiquidationPrice(e.target.value)} /> */}
-            
+
             <div className="w-[46%]">
                 <div className="text-[#dbe1e8] text-center">Enter Collateral Amount</div>
-                <input className="mt-2 w-[100%] px-4 py-1.5 text-sm rounded-md" type="number" name="Collateral Amount" placeholder="Collateral Amount" value={collateralAmount} onChange={e => setCollateralAmount(e.target.value)} />
+                <div className="mt-2 w-[100%]">
+                    <input className="pl-4 py-1.5 text-sm rounded-tl-md rounded-bl-md w-[75%]" type="number" name="Collateral Amount" placeholder="Collateral Amount" value={collateralAmount} onChange={e => setCollateralAmount(e.target.value)} />
+                    <input className="py-1.5 text-sm rounded-tr-md rounded-br-md w-[25%] bg-white text-center" type="text" value={props.collateralType} disabled />
+                </div>
 
                 <p className="text-[#dbe1e8] text-center mt-8">Enter Liquidation Price</p>
-                <input className="mt-2 w-[100%] px-4 py-1.5 text-sm rounded-md" type="number" name="Liquidation Price" placeholder="Liquidation Price" value={liquidationPrice} onChange={e => setLiquidationPrice(e.target.value)}></input>
-                
+                <div className="mt-2 w-[100%]">
+                    <input className="pl-4 py-1.5 text-sm rounded-tl-md rounded-bl-md w-[75%]" type="number" name="Liquidation Price" placeholder="Liquidation Price" value={liquidationPrice} onChange={e => setLiquidationPrice(e.target.value)} />
+                    <input className="py-1.5 text-sm rounded-tr-md rounded-br-md w-[25%] bg-white text-center" type="text" value="USD" disabled />
+                </div>
+
             </div>
 
             <div className="w-[46%] text-center">
@@ -53,7 +57,7 @@ export default function LoanAmountCalculator(props) {
                     <div>{loanType}</div>
                 </div>
             </div>
-            
+
             {/* <h2>Max amount you can borrow: {loanAmount}</h2> */}
         </div>
     )
